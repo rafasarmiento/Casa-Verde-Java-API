@@ -42,7 +42,7 @@ public class Event {
 	private List<Payment> Payments;
 	
 	public Event(Long id, java.util.Date date, Integer type, String status, Double price, Double aditional,
-			Double total, String comments, Client client, List<Payment> payments) {
+			Double total, String comments, Client client) {
 		super();
 		Id = id;
 		Date = date;
@@ -53,7 +53,6 @@ public class Event {
 		Total = total;
 		Comments = comments;
 		Client_idClient = client;
-		Payments = payments;
 	}
 
 	public Long getId() {
