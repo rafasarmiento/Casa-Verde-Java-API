@@ -9,7 +9,7 @@ import com.casaverde.casaverde.entities.Payment;
 
 public interface IPaymentRepository extends JpaRepository<Payment, Long> {
 
-	List<Payment> findPaymentsByEvent(Long id);
+	List<Payment> findPaymentsByEvent(Long id);;
 
 	String deleteEventPayments(Event event);
 

@@ -25,7 +25,7 @@ public class EventService {
 	private IPaymentRepository paymentRepository;//metodos para manejar la tabla de Pagos
 	
 	
-	public Event addEvent(@RequestBody Event event) {
+	public Event addEvent(Event event) {
 		return eventRepository.save(event);
 	}
 	
@@ -34,38 +34,30 @@ public class EventService {
 		return eventRepository.findAll();
 	}
 	
-	public Event getEventById(@PathVariable Long id) {
+	public Event getEventById(Long id) {
 		return eventRepository.findById(id).orElse(null);
 	}
 	
-	public Event updateEvent(@RequestBody Event event) {
-		Event oldEvent= eventRepository.findById(event.getId()).orElse(null);
-		
-		if (oldEvent !=null) {
-			double oldEventTotal=oldEvent.getTotal();
-			double eventPayments=0;
-			List<Payment> oldEventPayments = oldEvent.getPayments();
+	public Event updateEvent(Event event) {
+		double eventTotal = event.getTotal();
+		double eventPayments = 0;
+
+		for (Payment p : event.getPayments()) {
+			eventPayments += p.getAmount();
 			
-			oldEventPayments.add(event.getPayments().get(0));//de esta forma ya que siempre se agrega de a 1 pago
-			
-			for (Payment payment : oldEventPayments) {
-				eventPayments += payment.getAmount();
-			}
-			
-			if (eventPayments > oldEventTotal) {
-				System.out.println("El pago total excede al monto total del evento");
+			if (eventPayments > eventTotal) {
+				System.out.println("el monto de los pagos supera el total del evento");
 				return null;
-			} else {
-				
+			} else if (eventPayments == eventTotal) {
+				event.setStatus("Pagado");
 			}
-			
-		} else {
-			return null;
 		}
-		return null;
+
+		return eventRepository.save(event);
+
 	}
 	
-	public String deleteEvent(@PathVariable Long id) {
+	public String deleteEvent(Long id) {
 		eventRepository.deleteById(id);
 		return "Evento borrado: " + id;
 	}

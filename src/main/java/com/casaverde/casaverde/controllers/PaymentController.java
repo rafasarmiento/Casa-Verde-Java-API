@@ -35,7 +35,32 @@ public class PaymentController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/addPayment")
 	public Payment addPayment(@RequestBody Payment payment) {
-		return paymentService.addPayment(payment);
+		boolean valid = true;
+
+		try {
+			Event eventPayment = eventService.getEventById(payment.getEventId());
+			List<Payment> payments = eventPayment.getPayments();
+			payments.add(payment);
+			eventPayment.setPayments(payments);
+			System.out.println("Actualizando el evento...");
+			Event updatedEvent = eventService.updateEvent(eventPayment);
+			if (updatedEvent == null) {
+				valid = false;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Ha ocurrido una excepcion: " + e.getMessage() + "\nEmpiezo el StackTrace:");
+			e.printStackTrace();
+			valid = false;
+		}
+
+		if (valid) {
+			System.out.println("Creando pago...");
+			return paymentService.addPayment(payment);
+		} else {
+			System.out.println("No se ha procesado el pago correctamente, no se actualiza el evento...");
+			return null;
+		}
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/payments/delete/{id}")

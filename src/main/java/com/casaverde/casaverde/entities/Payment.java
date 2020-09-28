@@ -29,17 +29,17 @@ public class Payment {
 	
 	private Client Client;
 	
-	private Event Event;
+	private Long EventId;
 	
 	public Payment(Long id, Double amount, Integer type, java.util.Date date,
-			Client client, Event event) {
+			Client client, Long event) {
 		super();
 		Id = id;
 		Amount = amount;
 		Type = type;
 		Date = date;
 		Client = client;
-		Event = event;
+		EventId = event;
 	}
 	
 	public Long getId() {
@@ -72,11 +72,11 @@ public class Payment {
 	public void setClient(Client client) {
 		Client = client;
 	}
-	public Event getEvent() {
-		return Event;
+	public Long getEventId() {
+		return EventId;
 	}
-	public void setEvent(Event event) {
-		Event = event;
+	public void setEventId(Long eventId) {
+		EventId = eventId;
 	}
 	
 }
